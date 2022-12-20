@@ -13,10 +13,10 @@
 	# read data
 
 		# read data
-		veg_grassland <- read.table("vegetation.csv", h = T)
+		veg_grassland <- read.table("vegetation.csv", h = T, sep =",")
 
-		veg_bm_grassland <- read.table("vegetation_biomass.csv", h = T)
-		veg_bm_grassland <- na.omit(veg_bm_grassland)
+		veg_bm <- read.table("vegetation_biomass.csv", h = T, sep =",")
+		veg_bm <- na.omit(veg_bm)
 		
 		veg_grassland$year <- as.numeric(as.character(veg_grassland$year))
 		veg_grassland$year_fac <- ordered(veg_grassland$year)

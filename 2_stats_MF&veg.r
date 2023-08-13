@@ -134,12 +134,12 @@
 		veg_bm2 <- na.omit(veg_bm)
 		
 		# interaction without detail by plots
-			gam_veg_ab <- gam(value ~ treat + s(year, k = 2, bs = "cs"), data = veg_bm, method = 'REML')
+			gam_veg_ab <- gam(drymass ~ treat + s(year, k = 2, bs = "cs"), data = veg_bm, method = 'REML')
 			summary(gam_veg_ab)
 				# treat ***
 				# year  ***
 
-			gam_veg_ab_s <- gam(value ~ s(year, k = 3), data = veg_bm, method = 'REML')
+			gam_veg_ab_s <- gam(drymass ~ s(year, k = 3), data = veg_bm, method = 'REML')
 			summary(gam_veg_g_s)
 				# year  ***
 

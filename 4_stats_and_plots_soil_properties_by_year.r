@@ -104,144 +104,141 @@
 
 	# plot
 
+		# dummy plot to create simplified legend
+
+		gg_leg <- get_legend(ggplot(soil, aes(x = treat, y = TOC, fill = treat)) + geom_boxplot() + 
+							scale_fill_manual(	name = "Treatment", 
+									breaks = c("R","RC"),
+									values = c("#EC9755","#833F0B"), 
+									labels = c("Fine Earth","Fine Earth + Compost")
+									) +
+							theme_classic() +
+							theme(legend.direction = "horizontal", legend.title = element_blank()))
+
+		# 1st line
+
+		# TOC
+			gg_toc <- ggplot(soil, aes(x = year_fac, y = TOC, fill = interaction(year_fac, treat))) +
+								geom_boxplot() + 
+								#geom_smooth( aes(x = as.numeric(treat), y = TOC, col = year_fac), se = F, method = "lm", size = 1, linetype="dashed", col = "grey50") +	
+								geom_text(data = mean_toc, aes(x = c(.85, 1.90, 1.25, 2.25), y = quant, label = test), vjust = -.8, size = 2.5) +	
+								#geom_text(data = mean_toc, aes(x = c(.8, 1.2, 1.8, 2.2), y = rep(.2,4), label = c(2013,2016,2013,2016)), vjust = 0.8 , size = 2.5) +
+								ylab ("Organic Carbon") +
+								ylim(0, 18) +
+								scale_fill_manual(name = "Treatment", 
+												breaks = c("2013.R", "2013.RC", "2016.R",  "2016.RC"),
+												values = c("#EC9755", "#833F0B", "#EC9755",  "#833F0B"), 
+												labels = c("Fine Earth","Fine Earth + Compost","Fine Earth","Fine Earth + Compost"))  +
+								theme_classic() +
+								theme(legend.position =  "none", axis.title.x = element_blank(), axis.text.x = element_blank())	
+
+		# SOM
+			gg_som <- ggplot(soil, aes(x = year_fac, y = SOM, fill = interaction(year_fac, treat))) +
+								geom_boxplot() + 
+								geom_smooth( aes(x = as.numeric(treat), y = SOM, col = year_fac), se = F, method = "lm", size = 1, linetype="dashed", col = "grey50") +	
+								geom_text(data = mean_som, aes(x = c(.85, 1.9, 1.25, 2.25), y = quant, label = test), vjust = -.8) +	
+								ylab ("Organic Carbon") +
+								ylim(0, 25) +
+								scale_fill_manual(	name = "Treatment", 
+													breaks = c("2013.R", "2013.RC", "2016.R",  "2016.RC"),
+													values = c("#EC9755","#833F0B",  "#EC9755", "#833F0B"), 
+													labels = c("Fine Earth","Fine Earth + Compost","Fine Earth","Fine Earth + Compost"))  +
+								theme_classic() +
+								theme(legend.position =  "none", axis.title.x = element_blank(), axis.text.x = element_blank())
+
+
+
+
+
 		# N
-			gg_N <- ggplot(soil, aes(x = treat, y = Nt, fill = interaction(treat,year_fac))) +
+			gg_N <- ggplot(soil, aes(x = year_fac, y = Nt, fill = interaction(year_fac, treat))) +
 										geom_boxplot() + 
 										geom_smooth( aes(x = as.numeric(treat), y = Nt, col = year_fac), se = F, method = "lm", size = 1, linetype="dashed", col = "grey50") +	
-										geom_text(data = mean_N, aes(x = c(.85, 1.25, 1.90, 2.3), y = quant, label = test), vjust = -.8, size = 2.5) +												
-										ylab ("Soil Nitrogen (N)") +
+										geom_text(data = mean_N, aes(x = c(.85, 1.90, 1.25, 2.25), y = quant, label = test), vjust = -.8, size = 2.5) +	
+										#geom_text(data = mean_cn, aes(x = c(.8, 1.2, 1.8, 2.2), y = rep(1,4), label = c(2013,2016,2013,2016)), vjust = 0.8 , size = 2.5) +	
+										ylab ("Nitrogen") +
 										xlab("Type of Technosol") +
 										ylim(0, 1) +
 										scale_fill_manual(	name = "Treatment", 
-															breaks = c( "R.2013", "R.2016", "RC.2013", "RC.2016"),
-															values = c("#A9936A","#544935", "#939F79",   "#616951"), 
-															labels = c("EDH | 2013","EDH | 2016","EDH + GWC | 2013","EDH + GWC | 2016"))  +
-										scale_x_discrete(labels = c("EDH","EDH + GWC")) +
+															breaks = c("2013.R", "2013.RC", "2016.R",  "2016.RC"),
+															values = c("#EC9755","#833F0B",  "#EC9755", "#833F0B"), 
+															labels = c("Fine Earth","Fine Earth + Compost","Fine Earth","Fine Earth + Compost"))  +
+										scale_x_discrete(labels = c("Fine Earth","Fine Earth + Compost")) +
 										theme_classic() +
 										theme(legend.position =  "none", axis.title.x = element_blank(), axis.text.x = element_blank())	
 
+		# C/N
+			gg_CN <- ggplot(soil, aes(x = year_fac, y = C.N, fill = interaction(year_fac, treat))) +
+								geom_boxplot() + 
+								geom_text(data = mean_cn, aes(x = c(.9, 1.9, 1.25, 2.25), y = quant, label = test), vjust = -.8, size = 2.5) +
+								ylab ("C:N") +
+								xlab("Type of Technosol") +
+								scale_fill_manual(	name = "Treatment", 
+													breaks = c("2013.R", "2013.RC", "2016.R",  "2016.RC"),
+													values = c("#EC9755","#833F0B",  "#EC9755", "#833F0B"), 
+													labels = c("Fine Earth","Fine Earth + Compost","Fine Earth","Fine Earth + Compost"))  +
+								scale_y_log10(limits = c(5, 330) ) +
+								annotation_logticks(sides="l") +
+								theme_classic() +
+								theme(legend.position =  "none", axis.title.x = element_blank(), axis.text.x = element_blank())	
+
+
+
+		# 2nd line
+
+		# pH
+			gg_ph <- ggplot(soil, aes(x = year_fac, y = pH_water, fill = interaction(year_fac, treat))) +
+								geom_boxplot() + 
+								geom_smooth( aes(x = as.numeric(treat), y = pH_water, col = year_fac), se = F, method = "lm", size = 1, linetype="dashed", col = "grey50") +
+								geom_text(data = mean_ph, aes(x = c(.9, 1.9, 1.25, 2.25), y = quant, label = test), vjust = -.8, size = 2.5) +
+								ylab ("pH") +
+								ylim(7, 9) +
+								scale_fill_manual(	name = "Treatment", 
+													breaks = c("2013.R", "2013.RC", "2016.R",  "2016.RC"),
+													values = c("#EC9755","#833F0B",  "#EC9755", "#833F0B"), 
+													labels = c("Fine Earth","Fine Earth + Compost","Fine Earth","Fine Earth + Compost")) +
+								theme_classic() +
+								theme(legend.position =  "none", axis.title.x = element_blank())	
+
+
+
 		# P
-			gg_P <- ggplot(soil, aes(x = treat, y = P2O5, fill = interaction(treat,year_fac))) +
-										geom_boxplot() + 
-										geom_smooth( aes(x = as.numeric(treat), y = P2O5, col = year_fac), se = F, method = "lm", size = 1, linetype="dashed", col = "grey50") +	
-										geom_text(data = mean_P, aes(x = c(.9, 1.25, 1.90, 2.3), y = quant, label = test), vjust = -.8 , size = 2.5) +												
-										ylab ("Soil Phosphorus (P)") +
-										xlab("Type of Technosol") +
-										ylim(0, .075) +
-										scale_fill_manual(	name = "Treatment", 
-															breaks = c( "R.2013", "R.2016", "RC.2013", "RC.2016"),
-															values = c("#A9936A","#544935", "#939F79",   "#616951"), 
-															labels = c("EDH | 2013","EDH | 2016","EDH + GWC | 2013","EDH + GWC | 2016"))  +
-										scale_x_discrete(labels = c("EDH","EDH + GWC")) +
-										theme_classic() +
-										theme(legend.position =  "none", axis.title.x = element_blank(), axis.text.x = element_blank())	
+			gg_P <- ggplot(soil, aes(x = year_fac, y = P2O5, fill = interaction(year_fac, treat))) +
+								geom_boxplot() + 
+								geom_smooth( aes(x = as.numeric(treat), y = P2O5, col = year_fac), se = F, method = "lm", size = 1, linetype="dashed", col = "grey50") +
+								geom_text(data = mean_P, aes(x = c(.9, 1.9, 1.25, 2.3), y = quant, label = test), vjust = -.8 , size = 2.5) +
+								ylab ("Phosphorus") +
+								xlab("Type of Technosol") +
+								ylim(0, .075) +
+								scale_fill_manual(	name = "Treatment", 
+													breaks = c("2013.R", "2013.RC", "2016.R",  "2016.RC"),
+													values = c("#EC9755","#833F0B",  "#EC9755", "#833F0B"), 
+													labels = c("Fine Earth","Fine Earth + Compost","Fine Earth","Fine Earth + Compost"))  +
+								theme_classic() +
+								theme(legend.position =  "none", axis.title.x = element_blank())	
 
 
 		# K
-			gg_K <- ggplot(soil, aes(x = treat, y = K2O, fill = interaction(treat,year_fac))) +
-										geom_boxplot() + 
-										geom_smooth( aes(x = as.numeric(treat), y = K2O, col = year_fac), se = F, method = "lm", size = 1, linetype="dashed", col = "grey50") +	
-										geom_text(data = mean_K, aes(x = c(.85, 1.25, 1.90, 2.25), y = c(.035, .15, .2, .145), label = test), vjust = -.8, size = 2.5) +												
-										ylab ("Soil Potassium (K)") +
-										xlab("Type of Technosol") +
-										ylim(0, .26) +
-										scale_fill_manual(	name = "Treatment", 
-															breaks = c( "R.2013", "R.2016", "RC.2013", "RC.2016"),
-															values = c("#A9936A","#544935", "#939F79",   "#616951"), 
-															labels = c("EDH | 2013","EDH | 2016","EDH + GWC | 2013","EDH + GWC | 2016"))  +
-										scale_x_discrete(labels = c("EDH","EDH + GWC")) +
-										theme_classic() +
-										theme(legend.position =  "none", axis.title.x = element_blank(), axis.text.x = element_blank())	
-
-
-		# C/N
-			gg_CN <- ggplot(soil, aes(x = treat, y = C.N, fill = interaction(treat,year_fac))) +
+			gg_K <- ggplot(soil, aes(x = year_fac, y = K2O, fill = interaction(year_fac, treat))) +
 								geom_boxplot() + 
-								geom_smooth( aes(x = as.numeric(treat), y = C.N, col = year_fac), se = F, method = "lm", size = 1, linetype="dashed", col = "grey50") +
-								geom_text(data = mean_cn, aes(x = c(.9, 1.25, 1.90, 2.25), y = quant, label = test), vjust = -.8, size = 2.5) +
-								geom_text(data = mean_cn, aes(x = c(.8, 1.2, 1.8, 2.2), y = rep(1,4), label = c(2013,2016,2013,2016)), vjust = 0.8 , size = 2.5) +	
-								ylab ("soil C:N") +
+								geom_smooth( aes(x = as.numeric(treat), y = K2O, col = year_fac), se = F, method = "lm", size = 1, linetype="dashed", col = "grey50") +	
+								geom_text(data = mean_K, aes(x = c(.85, 1.9, 1.25, 2.25), y = c(.035, .15, .2, .145), label = test), vjust = -.8, size = 2.5) +
+								ylab ("Potassium") +
 								xlab("Type of Technosol") +
-								ylim(-5, 330) +
+								ylim(0, .26) +
 								scale_fill_manual(	name = "Treatment", 
-													breaks = c( "R.2013", "R.2016", "RC.2013", "RC.2016"),
-													values = c("#A9936A","#544935", "#939F79",   "#616951"), 
-													labels = c("EDH | 2013","EDH | 2016","EDH + GWC | 2013","EDH + GWC | 2016"))  +
-								scale_x_discrete(labels = c("EDH","EDH + GWC")) +
+													breaks = c("2013.R", "2013.RC", "2016.R",  "2016.RC"),
+													values = c("#EC9755","#833F0B",  "#EC9755", "#833F0B"), 
+													labels = c("Fine Earth","Fine Earth + Compost","Fine Earth","Fine Earth + Compost"))  +
 								theme_classic() +
-								theme(legend.position =  "none")	
+								theme(legend.position =  "none", axis.title.x = element_blank())	
 
 
-		
-		# pH
-			gg_ph <- ggplot(soil, aes(x = treat, y = pH_water, fill = interaction(treat,year_fac))) +
-								geom_boxplot() + 
-								geom_smooth( aes(x = as.numeric(treat), y = pH_water, col = year_fac), se = F, method = "lm", size = 1, linetype="dashed", col = "grey50") +
-								geom_text(data = mean_ph, aes(x = c(.9, 1.25, 1.90, 2.25), y = quant, label = test), vjust = -.8, size = 2.5) +
-								geom_text(data = mean_ph, aes(x = c(.8, 1.2, 1.8, 2.2), y = rep(6.05,4), label = c(2013,2016,2013,2016)), vjust = 0.8 , size = 2.5) +											
-								ylab ("soil pH (Water)") +
-								xlab("Type of Technosol") +
-								ylim(6, 9) +
-								scale_fill_manual(	name = "Treatment", 
-													breaks = c( "R.2013", "R.2016", "RC.2013", "RC.2016"),
-													values = c("#A9936A","#544935", "#939F79",   "#616951"), 
-													labels = c("EDH | 2013","EDH | 2016","EDH + GWC | 2013","EDH + GWC | 2016"))  +
-								scale_x_discrete(labels = c("EDH","EDH + GWC")) +
-								theme_classic() +
-								theme(legend.position =  "none")	
 
-		# TOC
-			gg_toc <- ggplot(soil, aes(x = treat, y = TOC, fill = interaction(treat,year_fac))) +
-								geom_boxplot() + 
-								geom_smooth( aes(x = as.numeric(treat), y = TOC, col = year_fac), se = F, method = "lm", size = 1, linetype="dashed", col = "grey50") +	
-								geom_text(data = mean_toc, aes(x = c(.85, 1.25, 1.90, 2.25), y = quant, label = test), vjust = -.8, size = 2.5) +	
-								geom_text(data = mean_toc, aes(x = c(.8, 1.2, 1.8, 2.2), y = rep(.2,4), label = c(2013,2016,2013,2016)), vjust = 0.8 , size = 2.5) +									
-								ylab ("TOC") +
-								xlab("Type of Technosol") +
-								ylim(0, 18) +
-								scale_fill_manual(	name = "Treatment", 
-													breaks = c( "R.2013", "R.2016", "RC.2013", "RC.2016"),
-													values = c("#A9936A","#544935", "#939F79",   "#616951"), 
-													labels = c("EDH | 2013","EDH | 2016","EDH + GWC | 2013","EDH + GWC | 2016"))  +
-								scale_x_discrete(labels = c("EDH","EDH + GWC")) +
-								theme_classic() +
-								theme(legend.position =  "none")	
-
-		# SOM
-			gg_som <- ggplot(soil, aes(x = treat, y = SOM, fill = interaction(treat,year_fac))) +
-								geom_boxplot() + 
-								geom_smooth( aes(x = as.numeric(treat), y = SOM, col = year_fac), se = F, method = "lm", size = 1, linetype="dashed", col = "grey50") +	
-								geom_text(data = mean_som, aes(x = c(.85, 1.25, 1.90, 2.25), y = quant, label = test), vjust = -.8) +	
-								ylab ("Soil Organic Matter") +
-								xlab("Type of Technosol") +
-								ylim(0, 25) +
-								scale_fill_manual(	name = "Treatment", 
-													breaks = c( "R.2013", "R.2016", "RC.2013", "RC.2016"),
-													values = c("#A9936A","#544935", "#939F79",   "#616951"), 
-													labels = c("EDH | 2013","EDH | 2016","EDH + GWC | 2013","EDH + GWC | 2016"))  +
-								scale_x_discrete(labels = c("EDH","EDH + GWC")) +
-								theme_classic() +
-								theme(legend.position = c(0.85, 0.25))
-
-		# CEC
-			gg_cec <- ggplot(soil, aes(x = treat, y = CEC, fill = interaction(treat,year_fac))) +
-								geom_boxplot() + 
-								geom_smooth( aes(x = as.numeric(treat), y = CEC, col = year_fac), se = F, method = "lm", size = 1, linetype="dashed", col = "grey50") +	
-								geom_text(data = mean_cec, aes(x = c(.85, 1.25, 1.90, 2.25), y = quant, label = test), vjust = -.8, size = 2.5) +
-								ylab ("soil CEC") +
-								xlab("Type of Technosol") +
-								ylim(20, 45) +
-								scale_fill_manual(	name = "Treatment", 
-													breaks = c( "R.2013", "R.2016", "RC.2013", "RC.2016"),
-													values = c("#A9936A","#544935", "#939F79",   "#616951"), 
-													labels = c("EDH | 2013","EDH | 2016","EDH + GWC | 2013","EDH + GWC | 2016"))  +
-								scale_x_discrete(labels = c("EDH","EDH + GWC")) +
-								theme_classic() +
-								theme(legend.position = c(0.85, 0.25))
+		ggarrange(gg_toc, gg_N, gg_CN, gg_ph, gg_P, gg_K,   ncol = 3, nrow = 2, widths = c(0.22, .225,.225,.225, .225), labels = "AUTO", common.legend = TRUE, legend = "bottom", legend.grob = gg_leg)
 
 
-		ggarrange( gg_N, gg_P, gg_K, gg_CN, gg_ph, gg_toc, ncol = 3, nrow = 2, widths = c(0.22, .225,.225,.225, .225), labels="AUTO")
-		ggsave("Fig_2_soil_nutrient.pdf", device = cairo_pdf, width = 6, height = 4)
+		ggsave("..//Fig_2_soil_nutrient_by_year.pdf", device = cairo_pdf, width = 6, height = 4)
 
 
 		# ggarrange( gg_som, gg_N, gg_P, gg_K, gg_ph, ncol = 5, nrow = 1, widths = c(0.22, .225,.225,.225, .225), common.legend = TRUE, legend="bottom",labels="AUTO")
@@ -320,17 +317,17 @@ letters_cu[[3]]$Letters
 	# plots
 
 		# Cu
-			gg_cu <- ggplot(soil, aes(x = treat, y = Cu_ER, fill = interaction(treat,year_fac))) +
+			gg_cu <- ggplot(soil, aes(x = year_fac, y = Cu_ER, fill = interaction(year_fac, treat))) +
 								geom_boxplot() + 
 								geom_smooth( aes(x = as.numeric(treat), y = Cu_ER, col = year_fac), se = F, method = "lm", size = 1, linetype="dashed", col = "grey50") +		
 								geom_text(data = mean_cu, aes(x = c(.9, 1.25, 1.90, 2.3), y = quant, label = test), vjust = -.8, size = 2.5) +
 								ylab ("soil Cu") +
 								ylim(0, 25) +
 								scale_fill_manual(	name = "Treatment", 
-													breaks = c( "R.2013", "R.2016", "RC.2013", "RC.2016"),
-													values = c("#A9936A","#544935", "#939F79",   "#616951"), 
-													labels = c("EDH | 2013","EDH | 2016","EDH + GWC | 2013","EDH + GWC | 2016"))  +
-								scale_x_discrete(labels = c("EDH","EDH + GWC")) +
+													breaks = c("2013.R", "2013.RC", "2016.R",  "2016.RC"),
+													values = c("#EC9755","#833F0B",  "#EC9755", "#833F0B"), 
+													labels = c("Fine Earth","Fine Earth + Compost"))  +
+								scale_x_discrete(labels = c("Fine Earth","Fine Earth + Compost")) +
 								theme_classic() +
 								theme(legend.position =  "none", axis.title.x = element_blank(), axis.text.x = element_blank())	
 								# theme(legend.position = c(0.85, 0.25))
@@ -338,17 +335,17 @@ letters_cu[[3]]$Letters
 
 
 		# Pb
-			gg_pb <- ggplot(soil, aes(x = treat, y = Pb_ER, fill = interaction(treat,year_fac))) +
+			gg_pb <- ggplot(soil, aes(x = year_fac, y = Pb_ER, fill = interaction(year_fac, treat))) +
 								geom_boxplot() + 
 								geom_smooth( aes(x = as.numeric(treat), y = Pb_ER, col = year_fac), se = F, method = "lm", size = 1, linetype="dashed", col = "grey50") +	
-								geom_text(data = mean_pb, aes(x = c(.85, 1.25, 1.90, 2.25), y = quant, label = test), vjust = -.8, size = 2.5) +									
+								geom_text(data = mean_pb, aes(x = c(.85, 1.9, 1.25, 2.25), y = quant, label = test), vjust = -.8, size = 2.5) +									
 								ylab ("soil Pb") +
 								ylim(0, 40) +
 								scale_fill_manual(	name = "Treatment", 
-													breaks = c( "R.2013", "R.2016", "RC.2013", "RC.2016"),
-													values = c("#A9936A","#544935", "#939F79",   "#616951"), 
-													labels = c("EDH | 2013","EDH | 2016","EDH + GWC | 2013","EDH + GWC | 2016"))  +
-								scale_x_discrete(labels = c("EDH","EDH + GWC")) +
+													breaks = c("2013.R", "2013.RC", "2016.R",  "2016.RC"),
+													values = c("#EC9755","#833F0B",  "#EC9755", "#833F0B"), 
+													labels = c("Fine Earth","Fine Earth + Compost"))  +
+								scale_x_discrete(labels = c("Fine Earth","Fine Earth + Compost")) +
 								theme_classic() +
 								theme(legend.position =  "none", axis.title.x = element_blank(), axis.text.x = element_blank())	
 								# theme(legend.position = c(0.85, 0.25))
@@ -356,7 +353,7 @@ letters_cu[[3]]$Letters
 
 
 		# Ni
-			gg_ni <- ggplot(soil, aes(x = treat, y = Ni_ER, fill = interaction(treat,year_fac))) +
+			gg_ni <- ggplot(soil, aes(x = year_fac, y = Ni_ER, fill = interaction(year_fac, treat))) +
 								geom_boxplot() + 
 								geom_smooth( aes(x = as.numeric(treat), y = Ni_ER, col = year_fac), se = F, method = "lm", size = 1, linetype="dashed", col = "grey50") +		
 								geom_text(data = mean_ni, aes(x = c(.9, 1.25, 1.90, 2.25), y = quant, label = test), vjust = -.8, size = 2.5) +									
@@ -365,29 +362,29 @@ letters_cu[[3]]$Letters
 								xlab("Type of Technosol") +
 								ylim(0, 18) +
 								scale_fill_manual(	name = "Treatment", 
-													breaks = c( "R.2013", "R.2016", "RC.2013", "RC.2016"),
-													values = c("#A9936A","#544935", "#939F79",   "#616951"), 
-													labels = c("EDH | 2013","EDH | 2016","EDH + GWC | 2013","EDH + GWC | 2016"))  +
-								scale_x_discrete(labels = c("EDH","EDH + GWC")) +
+													breaks = c("2013.R", "2013.RC", "2016.R",  "2016.RC"),
+													values = c("#EC9755","#833F0B",  "#EC9755", "#833F0B"), 
+													labels = c("Fine Earth","Fine Earth + Compost"))  +
+								scale_x_discrete(labels = c("Fine Earth","Fine Earth + Compost")) +
 								theme_classic() +
 								theme(legend.position =  "none")	
 								# theme(legend.position = c(0.85, 0.25))
 
 
 		# Zn
-			gg_cec <- ggplot(soil, aes(x = treat, y = Zn_ER, fill = interaction(treat,year_fac))) +
+			gg_cec <- ggplot(soil, aes(x = year_fac, y = Zn_ER, fill = interaction(year_fac, treat))) +
 								geom_boxplot() + 
 								geom_smooth( aes(x = as.numeric(treat), y = Zn_ER, col = year_fac), se = F, method = "lm", size = 1, linetype="dashed", col = "grey50") +		
-								geom_text(data = mean_cec, aes(x = c(.85, 1.25, 1.90, 2.25), y = c(25.5, 24, 29, 39.5), label = test), vjust = -.8, size = 2.5) +								
+								geom_text(data = mean_cec, aes(x = c(.85, 1.9, 1.25, 2.25), y = c(25.5, 24, 29, 39.5), label = test), vjust = -.8, size = 2.5) +								
 								geom_text(data = mean_ni, aes(x = c(.85, 1.2, 1.8, 2.2), y = rep(0,4), label = c(2013,2016,2013,2016)), vjust = 0.8, size = 2.5) +								
 								ylab ("soil Zn") +
 								xlab("Type of Technosol") +
 								ylim(0, 55) +
 								scale_fill_manual(	name = "Treatment", 
-													breaks = c( "R.2013", "R.2016", "RC.2013", "RC.2016"),
-													values = c("#A9936A","#544935", "#939F79",   "#616951"), 
-													labels = c("EDH | 2013","EDH | 2016","EDH + GWC | 2013","EDH + GWC | 2016"))  +
-								scale_x_discrete(labels = c("EDH","EDH + GWC")) +
+													breaks = c("2013.R", "2013.RC", "2016.R",  "2016.RC"),
+													values = c("#EC9755","#833F0B",  "#EC9755", "#833F0B"), 
+													labels = c("Fine Earth","Fine Earth + Compost"))  +
+								scale_x_discrete(labels = c("Fine Earth","Fine Earth + Compost")) +
 								theme_classic() +
 								theme(legend.position =  "none")	
 								# theme(legend.position = c(0.85, 0.25))							
